@@ -25,8 +25,13 @@ Avant de commencer, assurez-vous de modifier les informations de configuration d
 }
 ```
 ### Lancer le serveur:
+```json
 npm i
+```
+lancer le serveur:
+```json
 npm run start
+```
 
 ### Routes API
 ### Tâches
@@ -35,6 +40,6 @@ POST /tasks : Créer une nouvelle tâche
 PUT /tasks/:id : Mettre à jour une tâche existante
 DELETE /tasks/:id : Supprimer une tâche
 ### Utilisateurs
-GET /users : Récupérer tous les utilisateurs
-POST /register : Enregistrer un nouvel utilisateur
-POST /login : Authentifier un utilisateur et obtenir un token
+GET auth/users : Récupérer tous les utilisateurs
+POST auth/register : Enregistrer un nouvel utilisateur
+POST auth/login : Authentifier un utilisateur et obtenir un token
