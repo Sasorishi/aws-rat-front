@@ -1,6 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, Select, Space } from "antd";
+import axios from "axios";
+import AlertComponent from "@/app/components/AlertComponent";
+
 const { TextArea } = Input;
 const { Option } = Select;
 const layout = {
@@ -20,42 +23,52 @@ const tailLayout = {
 
 const TaskInformation = () => {
   const [form] = Form.useForm();
-  const onStatutChange = (value) => {
+  const [loading, setLoading] = useState();
+  const onStatusChange = (value) => {
     switch (value) {
       case "todo":
         form.setFieldsValue({
-          note: "Hi, man!",
+          note: "todo",
         });
         break;
       case "doing":
         form.setFieldsValue({
-          note: "Hi, lady!",
+          note: "doing",
         });
         break;
       case "done":
         form.setFieldsValue({
-          note: "Hi there!",
+          note: "done",
         });
         break;
       case "stocked":
         form.setFieldsValue({
-          note: "Hi there!",
+          note: "stocket",
         });
         break;
       default:
     }
   };
+
   const onFinish = (values) => {
-    console.log(values);
+    try {
+      const result = axios.post(process.env.NEXT_PUBLIC_API_WEB + "/tasks", {
+        name: values.title,
+        status: values.status,
+        description: values.description,
+      });
+    } catch (err) {
+      setError(err);
+      return (
+        <AlertComponent status="error" message="Error" description={err} />
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
   const onReset = () => {
     form.resetFields();
-  };
-  const onFill = () => {
-    form.setFieldsValue({
-      note: "Hello world!",
-      gender: "male",
-    });
   };
 
   return (
@@ -82,7 +95,7 @@ const TaskInformation = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          name="statut"
+          name="status"
           label="Statut"
           rules={[
             {
@@ -92,7 +105,7 @@ const TaskInformation = () => {
         >
           <Select
             placeholder="Select a option and change input text above"
-            onChange={onStatutChange}
+            onChange={onStatusChange}
             allowClear
           >
             <Option value="todo">A faire</Option>
