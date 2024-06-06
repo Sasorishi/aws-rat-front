@@ -25,6 +25,29 @@ router.get('/', async (req, res) => {
     }
   });
 
+  
+// get by id
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const tasks = await db.Task.findByPk(id, {include: [
+      {
+        model: db.Task,
+        as: 'children',
+      },
+      {
+        model: db.User,
+        as: 'users',
+        attributes: ['id', 'username', 'color'], // Inclure seulement ces attributs
+        through: { attributes: [] }, // Exclure la relation UserTasks
+      },
+    ]});
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Créer une nouvelle tâche
 router.post('/', async (req, res) => {
   try {
@@ -56,6 +79,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Mettre à jour une tâche
 router.put('/:id', async (req, res) => {
