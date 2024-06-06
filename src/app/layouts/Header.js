@@ -49,7 +49,10 @@ export default function HeaderLayout() {
           </svg>
         </li>
         <li>
-          <a className="text-sm text-gray-400 hover:text-gray-500" href="#">
+          <a
+            className="text-sm text-gray-400 hover:text-gray-500"
+            href="/tasks"
+          >
             Gestion
           </a>
         </li>

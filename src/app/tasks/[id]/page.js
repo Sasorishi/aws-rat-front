@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { CloseSquareFilled } from "@ant-design/icons";
-import { Button, Form, Input, Select, Space, Flex, Spin } from "antd";
+import { Button, Form, Input, Select, Space, Flex, Spin, Alert } from "antd";
 import axios from "axios";
 
 const { TextArea } = Input;
@@ -27,6 +27,7 @@ const TaskInformation = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [data, setData] = useState(null);
   const [alert, setAlert] = useState(null);
 
@@ -90,9 +91,10 @@ const TaskInformation = () => {
           description: values.description,
         }
       );
+      setSuccess("Task edited!");
     } catch (err) {
       // setError(err);
-      setAlert({ status: "error", message: "Error", description: err.message });
+      setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -103,10 +105,10 @@ const TaskInformation = () => {
       const response = axios.delete(
         `${process.env.NEXT_PUBLIC_API_WEB}/tasks/${id}`
       );
+      setSuccess("Task deleted!");
     } catch (err) {
       // setError(err);
-      console.log("ici");
-      setAlert({ status: "error", message: "Error", description: err.message });
+      setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -118,13 +120,19 @@ const TaskInformation = () => {
 
   return (
     <div className="flex flex-col min-h-screen items-center py-24">
-      {alert && (
-        <AlertComponent
-          status={alert.status}
-          message={alert.message}
-          description={alert.description}
-        />
-      )}
+      <div className="py-8">
+        {error && (
+          <Alert message="Error" description={error} type="error" showIcon />
+        )}
+        {success && (
+          <Alert
+            message="Success"
+            description={success}
+            type="success"
+            showIcon
+          />
+        )}
+      </div>
       {!loading ? (
         <Form
           {...layout}

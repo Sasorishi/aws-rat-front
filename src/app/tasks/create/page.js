@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Form, Input, Select, Space } from "antd";
+import { useRouter } from "next/navigation";
+import { Button, Form, Input, Select, Space, Alert } from "antd";
 import axios from "axios";
-import AlertComponent from "@/app/components/AlertComponent";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -23,7 +23,10 @@ const tailLayout = {
 
 const TaskInformation = () => {
   const [form] = Form.useForm();
+  const router = useRouter();
   const [loading, setLoading] = useState();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const onStatusChange = (value) => {
     switch (value) {
       case "todo":
@@ -57,11 +60,11 @@ const TaskInformation = () => {
         status: values.status,
         description: values.description,
       });
+      setSuccess("New task created!");
+      router.push("/tasks");
     } catch (err) {
-      setError(err);
-      return (
-        <AlertComponent status="error" message="Error" description={err} />
-      );
+      console.log(err);
+      setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -73,6 +76,19 @@ const TaskInformation = () => {
 
   return (
     <div className="py-16">
+      <div className="py-8">
+        {error && (
+          <Alert message="Error" description={error} type="error" showIcon />
+        )}
+        {success && (
+          <Alert
+            message="Success"
+            description={success}
+            type="success"
+            showIcon
+          />
+        )}
+      </div>
       <Form
         {...layout}
         form={form}
