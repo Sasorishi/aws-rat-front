@@ -2,13 +2,24 @@
 import React from "react";
 import Image from "next/image";
 import { Col, Row } from "antd";
-import { Button, Divider, FloatButton } from "antd";
+import { Button, Divider, FloatButton, message } from "antd";
 import Card from "./components/CardComponent";
 
 export default function Home() {
+
   const handleAddTaskButton = () => {
     console.log("onClick");
   };
+  const success = () => {
+    message.success("ceci est un succes!!");;
+  };
+  message.config({
+    top: 100,
+    duration: 2,
+    maxCount: 3,
+    rtl: true,
+    getContainer: () => document.body,
+  });
 
   return (
     <main className="flex flex-col min-h-screen items-center p-24">
@@ -22,6 +33,7 @@ export default function Home() {
           height={37}
           priority
         />
+        <Button onClick={success}>Success</Button>
         <h1 className="text-xl font-bold uppercase">Prospero</h1>
         <h3 className="text-md">Une solution de gestion de projet</h3>
       </div>
