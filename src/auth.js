@@ -32,6 +32,17 @@ export const signIn = (email, password) => {
       onFailure: (err) => {
         reject(err);
       },
+      newPasswordRequired: (userAttributes, requiredAttributes) => {
+        // Gérer le cas où un nouveau mot de passe est requis
+        // Vous pouvez rediriger l'utilisateur vers une page où il peut fournir un nouveau mot de passe
+        // ou demander au backend de générer un nouveau mot de passe
+        console.log("New password required");
+        resolve({
+          newPasswordRequired: true,
+          userAttributes,
+          requiredAttributes,
+        });
+      },
     });
   });
 };
